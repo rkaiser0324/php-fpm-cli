@@ -41,26 +41,26 @@ systemctl restart php-fpm
 The script will send the given PHP file to the PHP-FPM process and echo the response to STDOUT.
 
 ```shell script
-./php-fqm-cli -f </path/to/php/file> -q "<query_params>" [-connect <connection>] [-m <GET|POST>] [-u <URL>]
+./php-fpm-cli -f </path/to/php/file> -q "<query_params>" [-connect <connection>] [-m <GET|POST>] [-u <URL>]
 ```
 
 Parameters:
 | Flag | Description | Default | Example |
 | ---- | ----------- | ------- | ------- |
-| `-f` | Required path to the PHP file | | `/var/www/html/index.php` |
-| `-connect` | Optional PHP-FPM host and port, or path to a socket. | `/run/php-fpm/www.sock` | `127.0.0.1:9000` |
+| `-f` | Path to the PHP file | | `/var/www/html/index.php` |
+| `-connect` | PHP-FPM host and port, or path to a socket | `/run/php-fpm/www.sock` | `127.0.0.1:9000` |
 | `-m` | Request method, GET or POST | GET | |
-| `-u` | Optional URL to simulate. Only PHP files directly under the document root are currently supported. You may need to include `/index.php` since we don't have Apache RewriteRules. | | `https://www.mydomain.com/index.php` |
+| `-u` | URL to simulate. This must return an status code 200, so make sure this is the canonical URL (i.e., it will not redirect) | | `https://www.mydomain.com/` |
 
 
 Using query parameters:
 ```shell script
-./php-fqm-cli -f myscript.php -q "param1=val1&param2=val2"
+./php-fpm-cli -f myscript.php -q "param1=val1&param2=val2"
 ```
 
 Using a URL:
 ```shell script
-./php-fqm-cli -f /var/www/html/myscript.php -connect 127.0.0.1:9000 -u https://www.mydomain.com/index.php
+./php-fpm-cli -f /var/www/html/index.php -connect 127.0.0.1:9000 -u https://www.mydomain.com/
 ```
 
 [1]: https://gist.github.com/muhqu/91497df3a110f594b992

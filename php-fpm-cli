@@ -56,6 +56,11 @@ main() {
       # extract the protocol
       proto="$(echo $PHP_URL | grep :// | sed -e's,^\(.*://\).*,\1,g')"
 
+      if [[ $proto =~ https ]] 
+      then
+        https="on"
+      fi;
+
       # remove the protocol -- updated
       url_no_proto=$(echo $PHP_URL | sed -e s,$proto,,g)
 
@@ -85,9 +90,10 @@ main() {
     SERVER_NAME=$host \
     REQUEST_URI=/$path \
     SCRIPT_FILENAME=$PHP_FILE_PATH \
+    HTTPS=$https \
     QUERY_STRING=$PHP_QUERY_STRING \
     REQUEST_METHOD=$PHP_REQUEST_METHOD \
-    `which cgi-fcgi` -bind -connect "$CONN" > $TMP_OUTPUT_FILE_PATH #without dumping to file, cgi-fcgi hides "Status"
+    cgi-fcgi -bind -connect "$CONN" > $TMP_OUTPUT_FILE_PATH #without dumping to file, cgi-fcgi hides "Status"
 
     #Get successful-execution indications
     php_exit_code=$?;
